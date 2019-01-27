@@ -36,7 +36,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     public var scheduleItems: [RepeatingScheduleValue<DoubleRange>] = []
 
-    public let overrideContexts: [GlucoseRangeSchedule.Override.Context] = [.preMeal, .workout]
+    public let overrideContexts: [GlucoseRangeSchedule.Override.Context] = [.preMeal, .workout, .remoteTempTarget]
 
     public var overrideRanges: [GlucoseRangeSchedule.Override.Context: DoubleRange] = [:]
 
@@ -163,6 +163,8 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
                 image = UIImage(named: "workout", in: bundle, compatibleWith: traitCollection)
             case .preMeal:
                 image = UIImage(named: "Pre-Meal", in: bundle, compatibleWith: traitCollection)
+            case .remoteTempTarget:
+                image = UIImage(named: "ns-temp-blue", in: bundle, compatibleWith: traitCollection)
             }
 
             cell.iconImageView.image = image
