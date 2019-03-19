@@ -326,6 +326,8 @@
 		892A5DB82231E1A0008961AB /* ReservoirVolumeHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DB62231E19F008961AB /* ReservoirVolumeHUDView.swift */; };
 		892A5DBA2231E1CE008961AB /* BasalScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DB92231E1CE008961AB /* BasalScheduleTableViewController.swift */; };
 		892A5DBC2231E20C008961AB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DBB2231E20C008961AB /* Comparable.swift */; };
+		8951D1AD2241749B00F45694 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8951D1AC2241749A00F45694 /* WeakSet.swift */; };
+		8951D1AF2241753600F45694 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8951D1AE2241753600F45694 /* SuspendResumeTableViewCell.swift */; };
 		895FE06922011E5900FCF18A /* TemporaryScheduleOverrideSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE06622011E5800FCF18A /* TemporaryScheduleOverrideSettings.swift */; };
 		895FE06A22011E5900FCF18A /* TemporaryScheduleOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE06722011E5800FCF18A /* TemporaryScheduleOverride.swift */; };
 		895FE06B22011E5900FCF18A /* TemporaryScheduleOverridePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE06822011E5900FCF18A /* TemporaryScheduleOverridePreset.swift */; };
@@ -804,6 +806,8 @@
 		892A5DB62231E19F008961AB /* ReservoirVolumeHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirVolumeHUDView.swift; sourceTree = "<group>"; };
 		892A5DB92231E1CE008961AB /* BasalScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleTableViewController.swift; sourceTree = "<group>"; };
 		892A5DBB2231E20C008961AB /* Comparable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
+		8951D1AC2241749A00F45694 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakSet.swift; sourceTree = "<group>"; };
+		8951D1AE2241753600F45694 /* SuspendResumeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuspendResumeTableViewCell.swift; sourceTree = "<group>"; };
 		895FE06622011E5800FCF18A /* TemporaryScheduleOverrideSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideSettings.swift; sourceTree = "<group>"; };
 		895FE06722011E5800FCF18A /* TemporaryScheduleOverride.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverride.swift; sourceTree = "<group>"; };
 		895FE06822011E5900FCF18A /* TemporaryScheduleOverridePreset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverridePreset.swift; sourceTree = "<group>"; };
@@ -1039,6 +1043,7 @@
 				432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */,
 				432CF86820D76B320066B889 /* SetupButton.swift */,
 				432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */,
+				8951D1AE2241753600F45694 /* SuspendResumeTableViewCell.swift */,
 				432CF86C20D76C470066B889 /* SwitchTableViewCell.swift */,
 				895FE0962201250700FCF18A /* SwitchTableViewCell.xib */,
 				4369F093208BA001000E3E45 /* TextButtonTableViewCell.swift */,
@@ -1216,6 +1221,7 @@
 				895FE06722011E5800FCF18A /* TemporaryScheduleOverride.swift */,
 				895FE06822011E5900FCF18A /* TemporaryScheduleOverridePreset.swift */,
 				895FE06622011E5800FCF18A /* TemporaryScheduleOverrideSettings.swift */,
+				8951D1AC2241749A00F45694 /* WeakSet.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -1786,7 +1792,6 @@
 				4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */,
 				43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */,
 				43B17C81208BFA6600AC27E9 /* HKUnit.swift in Sources */,
-				C1983058223555ED00681079 /* TimeZone.swift in Sources */,
 				430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */,
 				430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */,
 				43177D021D3729E60006E908 /* IdentifiableClass.swift in Sources */,
@@ -1875,6 +1880,7 @@
 				43F5035721059A8A009FA89A /* ServiceCredential.swift in Sources */,
 				892A5DBA2231E1CE008961AB /* BasalScheduleTableViewController.swift in Sources */,
 				43BA7169201E49220058961E /* CarbEntryEditViewController.swift in Sources */,
+				8951D1AF2241753600F45694 /* SuspendResumeTableViewCell.swift in Sources */,
 				895FE08422011F0C00FCF18A /* OverrideMultiplierView.swift in Sources */,
 				892A5DA22231E137008961AB /* HUDProvider.swift in Sources */,
 				892A5DBC2231E20C008961AB /* Comparable.swift in Sources */,
@@ -1955,6 +1961,7 @@
 				437AFEEF2036A156008C4892 /* DeletedCarbObject+CoreDataClass.swift in Sources */,
 				4322B78C202FA2B30002837D /* HKQuantitySample+InsulinKit.swift in Sources */,
 				4322B78F202FA2B30002837D /* InsulinModel.swift in Sources */,
+				8951D1AD2241749B00F45694 /* WeakSet.swift in Sources */,
 				434C5F9C2098352500B2FD1A /* QuantityFormatter.swift in Sources */,
 				43F503642106C78C009FA89A /* ServiceAuthentication.swift in Sources */,
 				433BC7A720523DB7000B1200 /* NewGlucoseSample.swift in Sources */,
