@@ -636,7 +636,7 @@ extension AddEditOverrideTableViewController: EmojiInputControllerDelegate {
 }
 
 extension AddEditOverrideTableViewController: DatePickerTableViewCellDelegate {
-    func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
+    public func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         switch propertyRow(for: indexPath) {
         case .startDate:

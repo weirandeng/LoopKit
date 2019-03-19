@@ -1786,6 +1786,7 @@
 				4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */,
 				43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */,
 				43B17C81208BFA6600AC27E9 /* HKUnit.swift in Sources */,
+				C1983058223555ED00681079 /* TimeZone.swift in Sources */,
 				430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */,
 				430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */,
 				43177D021D3729E60006E908 /* IdentifiableClass.swift in Sources */,
@@ -2269,7 +2270,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.LoopKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -2287,7 +2287,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.LoopKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -2299,7 +2298,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.loopkit.LoopKit-ExampleUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = "LoopKit Example";
 				USES_XCTRUNNER = YES;
 			};
@@ -2313,7 +2311,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.loopkit.LoopKit-ExampleUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = "LoopKit Example";
 				USES_XCTRUNNER = YES;
 			};
@@ -2322,6 +2319,7 @@
 		43BA715D201E484D0058961E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -2344,13 +2342,13 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
 		43BA715E201E484D0058961E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -2372,7 +2370,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -2434,7 +2431,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2493,7 +2490,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2521,7 +2518,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchos watchsimulator";
-				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 			};
 			name = Debug;
@@ -2545,7 +2541,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchos watchsimulator";
-				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2,4";
 			};
 			name = Release;
@@ -2558,7 +2553,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -2570,7 +2564,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
