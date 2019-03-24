@@ -29,13 +29,6 @@ private extension TimeInterval {
     static let defaultOverrideDuration: TimeInterval = .hours(1)
 }
 
-private extension ClosedRange where Bound == Double {
-    // chosen arbitrarily
-    static let validInsulinNeedsFactorRange = 0.1...2.0
-}
-
-private typealias InsulinNeedsTableViewCell = CombinedTableViewCell<DecimalTextFieldTableViewCell, OverrideMultiplierTableViewCell>
-
 public final class AddEditOverrideTableViewController: UITableViewController {
 
     // MARK: - Public configuration API
@@ -103,18 +96,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     private var targetRange: DoubleRange? { didSet { updateSaveButtonEnabled() } }
 
-    private var insulinNeedsScaleFactor = 1.0 {
-        didSet {
-            guard
-                let insulinNeedsCell = insulinNeedsCell,
-                let multiplierDetailCell = insulinNeedsCell.cells.bottom
-            else {
-                return
-            }
-
-            setMultipliers(multiplierDetailCell)
-        }
-    }
+    private var insulinNeedsScaleFactor = 1.0
 
     private var startDate = Date()
 
@@ -154,8 +136,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         tableView.register(LabeledTextFieldTableViewCell.nib(), forCellReuseIdentifier: LabeledTextFieldTableViewCell.className)
         tableView.register(DoubleRangeTableViewCell.nib(), forCellReuseIdentifier: DoubleRangeTableViewCell.className)
         tableView.register(DecimalTextFieldTableViewCell.nib(), forCellReuseIdentifier: DecimalTextFieldTableViewCell.className)
-        tableView.register(OverrideMultiplierTableViewCell.self, forCellReuseIdentifier: OverrideMultiplierTableViewCell.className)
-        tableView.register(InsulinNeedsTableViewCell.self, forCellReuseIdentifier: InsulinNeedsTableViewCell.className)
+        tableView.register(InsulinSensitivityScalingTableViewCell.nib(), forCellReuseIdentifier: InsulinSensitivityScalingTableViewCell.className)
         tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
         tableView.register(SwitchTableViewCell.nib(), forCellReuseIdentifier: SwitchTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
@@ -169,7 +150,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
     }
 
     private enum PropertyRow: Int, CaseIterable {
-        case symbol = 0
+        case symbol
         case name
         case insulinNeeds
         case targetRange
@@ -256,31 +237,9 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 cell.delegate = self
                 return cell
             case .insulinNeeds:
-                let insulinNeedsCell: DecimalTextFieldTableViewCell = {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: DecimalTextFieldTableViewCell.className, for: indexPath) as! DecimalTextFieldTableViewCell
-                    cell.titleLabel.text = NSLocalizedString("Overall Insulin Needs", comment: "The text for the override insulin needs setting")
-                    cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .title3).bold()
-                    cell.textField.font = .preferredFont(forTextStyle: .title3)
-                    cell.textField.textColor = .black
-                    cell.textField.placeholder = String(100)
-                    cell.numberFormatter.maximumFractionDigits = 0
-                    cell.numberFormatter.minimumIntegerDigits = 1
-                    cell.number = insulinNeedsScaleFactor * 100 as NSNumber
-                    cell.unitLabel?.text = "%"
-                    cell.delegate = self
-                    cell.selectionStyle = .none
-                    return cell
-                }()
-
-                let overrideMultiplierCell: OverrideMultiplierTableViewCell = {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: OverrideMultiplierTableViewCell.className, for: indexPath) as! OverrideMultiplierTableViewCell
-                    setMultipliers(cell)
-                    return cell
-                }()
-
-                let cell = tableView.dequeueReusableCell(withIdentifier: InsulinNeedsTableViewCell.className, for: indexPath) as! InsulinNeedsTableViewCell
-                cell.setCells(top: insulinNeedsCell, bottom: overrideMultiplierCell)
-                
+                let cell = tableView.dequeueReusableCell(withIdentifier: InsulinSensitivityScalingTableViewCell.className, for: indexPath) as! InsulinSensitivityScalingTableViewCell
+                cell.scaleFactor = insulinNeedsScaleFactor
+                cell.delegate = self
                 return cell
             case .targetRange:
                 let cell = tableView.dequeueReusableCell(withIdentifier: DoubleRangeTableViewCell.className, for: indexPath) as! DoubleRangeTableViewCell
@@ -324,25 +283,6 @@ public final class AddEditOverrideTableViewController: UITableViewController {
             cell.tintColor = .defaultButtonTextColor
             return cell
         }
-    }
-
-    private var insulinNeedsCell: InsulinNeedsTableViewCell? {
-        guard let insulinNeedsIndexPath = indexPath(for: .insulinNeeds) else {
-            assertionFailure("Insulin needs cell should always be present in property rows")
-            return nil
-        }
-
-        return tableView.cellForRow(at: insulinNeedsIndexPath) as? InsulinNeedsTableViewCell
-    }
-
-    private func setMultipliers(_ cell: OverrideMultiplierTableViewCell) {
-        // Let the 'settings' type handle the proportional relationship between the multipliers
-        let settingsWithInsulinScaleFactor = TemporaryScheduleOverrideSettings(targetRange: nil, insulinNeedsScaleFactor: insulinNeedsScaleFactor)
-        cell.setMultipliers(
-            basalRate: settingsWithInsulinScaleFactor.basalRateMultiplier!,
-            insulinSensitivity: settingsWithInsulinScaleFactor.insulinSensitivityMultiplier!,
-            carbRatio: settingsWithInsulinScaleFactor.carbRatioMultiplier!
-        )
     }
 
     @objc private func durationFinitenessChanged(_ sender: UISwitch) {
@@ -589,30 +529,17 @@ extension AddEditOverrideTableViewController: TextFieldTableViewCellDelegate {
     }
 
     private func updateWithText(from cell: TextFieldTableViewCell) {
-        if let indexPath = tableView.indexPath(for: cell) {
-            switch propertyRow(for: indexPath) {
-            case .symbol:
-                symbol = cell.textField.text
-            case .name:
-                name = cell.textField.text
-            default:
-                assertionFailure()
-            }
-        } else {
-            guard
-                let insulinNeedsCell = insulinNeedsCell,
-                let cell = cell as? DecimalTextFieldTableViewCell,
-                cell === insulinNeedsCell.cells.top
-            else {
-                assertionFailure()
-                return
-            }
+        guard let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
 
-            if let scaleFactorPercentage = cell.number?.doubleValue {
-                insulinNeedsScaleFactor = (scaleFactorPercentage / 100).clamped(to: .validInsulinNeedsFactorRange)
-            } else {
-                insulinNeedsScaleFactor = 1.0
-            }
+        switch propertyRow(for: indexPath) {
+        case .symbol:
+            symbol = cell.textField.text
+        case .name:
+            name = cell.textField.text
+        default:
+            assertionFailure()
         }
     }
 }
@@ -632,6 +559,12 @@ extension AddEditOverrideTableViewController: EmojiInputControllerDelegate {
         textField.resignFirstResponder()
         textField.becomeFirstResponder()
         textField.customInput = customInput
+    }
+}
+
+extension AddEditOverrideTableViewController: InsulinSensitivityScalingTableViewCellDelegate {
+    func insulinSensitivityScalingTableViewCellDidUpdateScaleFactor(_ cell: InsulinSensitivityScalingTableViewCell) {
+        insulinNeedsScaleFactor = cell.scaleFactor
     }
 }
 
