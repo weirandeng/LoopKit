@@ -41,8 +41,10 @@ class DoubleRangeTableViewCell: UITableViewCell {
     var range: DoubleRange? {
         get {
             guard
-                let minValue = minValueTextField.text.flatMap(Double.init),
-                let maxValue = maxValueTextField.text.flatMap(Double.init)
+                let minValueString = minValueTextField.text,
+                let minValue = numberFormatter.number(from: minValueString)?.doubleValue,
+                let maxValueString = maxValueTextField.text,
+                let maxValue = numberFormatter.number(from: maxValueString)?.doubleValue
             else {
                 return nil
             }
