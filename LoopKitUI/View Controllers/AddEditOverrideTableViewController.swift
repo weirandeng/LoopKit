@@ -225,7 +225,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: LabeledTextFieldTableViewCell.className, for: indexPath) as! LabeledTextFieldTableViewCell
                 cell.titleLabel.text = NSLocalizedString("Symbol", comment: "The text for the override preset symbol setting")
                 cell.textField.text = symbol
-                cell.textField.placeholder = "🏃‍♀️"
+                cell.textField.placeholder = SettingsTableViewCell.NoValueString
                 cell.customInput = overrideSymbolKeyboard
                 cell.delegate = self
                 return cell
