@@ -104,7 +104,7 @@ class SegmentedGaugeBarLayer: CALayer {
             ? gaugeBorderColor
             : UIColor(cgColor: gaugeBorderColor).withAlphaComponent(0.5).cgColor
 
-        coverSegment(tracedBy: borderPath, in: context)
+        clearSegmentArea(tracedBy: borderPath, in: context)
         defer {
             drawBorder(borderPath, color: borderColor, in: context)
         }
@@ -119,11 +119,9 @@ class SegmentedGaugeBarLayer: CALayer {
             segmentFillRect.size.width += segmentOverlap
         }
 
-        let segmentFillPath = UIBezierPath(roundedRect: segmentFillRect, byRoundingCorners: roundedCorners, cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
-        drawGradient(over: segmentFillPath, in: context)
-
+        drawFilledGradient(over: segmentFillRect, roundingCorners: roundedCorners, in: context)
         if !isRightmostSegment {
-            drawNegativeSpacePath(negativeSpacePath(for: segmentRect), in: context)
+            drawOverlapInset(for: segmentRect, in: context)
         }
     }
 
@@ -153,23 +151,17 @@ class SegmentedGaugeBarLayer: CALayer {
         )
     }
 
-    private func negativeSpacePath(for segmentRect: CGRect) -> UIBezierPath {
-        var negativeSpaceRect = segmentRect.insetBy(dx: gaugeBorderWidth, dy: gaugeBorderWidth)
-        negativeSpaceRect.size.width += gaugeBorderWidth * 2
-        return UIBezierPath(roundedRect: negativeSpaceRect, cornerRadius: cornerRadius)
-    }
-
-    private func coverSegment(tracedBy path: UIBezierPath, in context: CGContext) {
-        // Cover the segment area with the background color to hide overlapping borders
+    private func clearSegmentArea(tracedBy path: UIBezierPath, in context: CGContext) {
         context.addPath(path.cgPath)
         context.setFillColor(backgroundColor ?? UIColor.white.cgColor)
         context.fillPath()
     }
 
-    private func drawGradient(over path: UIBezierPath, in context: CGContext) {
+    private func drawFilledGradient(over rect: CGRect, roundingCorners roundedCorners: UIRectCorner, in context: CGContext) {
         context.saveGState()
         defer { context.restoreGState() }
 
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: roundedCorners, cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
         context.addPath(path.cgPath)
         context.clip()
 
@@ -189,7 +181,10 @@ class SegmentedGaugeBarLayer: CALayer {
         )
     }
 
-    private func drawNegativeSpacePath(_ path: UIBezierPath, in context: CGContext) {
+    private func drawOverlapInset(for segmentRect: CGRect, in context: CGContext) {
+        var overlapInsetRect = segmentRect.insetBy(dx: gaugeBorderWidth, dy: gaugeBorderWidth)
+        overlapInsetRect.size.width += gaugeBorderWidth * 2
+        let path = UIBezierPath(roundedRect: overlapInsetRect, cornerRadius: cornerRadius)
         context.setStrokeColor(backgroundColor ?? UIColor.white.cgColor)
         context.setLineWidth(gaugeBorderWidth)
         context.addPath(path.cgPath)
