@@ -71,58 +71,60 @@ class SegmentedGaugeBarLayer: CALayer {
     }
 
     private func drawGauge(in context: CGContext) {
-        for countFromRight in segmentCounts {
-            drawSegment(atCountFromRight: countFromRight, in: context)
-        }
-    }
+        var previousSegmentBorder: (path: UIBezierPath, color: CGColor)?
 
-    private var segmentCounts: ClosedRange<Int> {
-        return 1...numberOfSegments
-    }
-
-    private func drawSegment(atCountFromRight countFromRight: Int, in context: CGContext) {
-        let isRightmostSegment = countFromRight == segmentCounts.lowerBound
-        let isLeftmostSegment = countFromRight == segmentCounts.upperBound
-        let fillFraction = (presentationProgress - CGFloat(numberOfSegments - countFromRight)).clamped(to: 0...1)
-        let (segmentSize, roundedCorners): (CGSize, UIRectCorner) = {
-            if isLeftmostSegment {
-                return (leftmostSegmentSize, .allCorners)
-            } else {
-                return (normalSegmentSize, [.topRight, .bottomRight])
+        func finishPreviousSegment() {
+            if let (borderPath, borderColor) = previousSegmentBorder {
+                drawBorder(borderPath, color: borderColor, in: context)
             }
-        }()
-
-        let segmentOrigin = CGPoint(
-            x: bounds.width - gaugeBorderWidth / 2 - CGFloat(countFromRight) * segmentSize.width,
-            y: bounds.minY + gaugeBorderWidth / 2
-        )
-        let segmentRect = CGRect(origin: segmentOrigin, size: segmentSize)
-
-        let borderPath = UIBezierPath(roundedRect: segmentRect, byRoundingCorners: roundedCorners, cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
-
-        let borderColor = fillFraction > 0
-            ? gaugeBorderColor
-            : UIColor(cgColor: gaugeBorderColor).withAlphaComponent(0.5).cgColor
-
-        clearSegmentArea(tracedBy: borderPath, in: context)
-        defer {
-            drawBorder(borderPath, color: borderColor, in: context)
         }
 
-        guard fillFraction > 0 else {
-            return
+        let segmentCounts = 1...numberOfSegments
+        for countFromRight in 1...numberOfSegments {
+            let isRightmostSegment = countFromRight == segmentCounts.lowerBound
+            let isLeftmostSegment = countFromRight == segmentCounts.upperBound
+            let fillFraction = (presentationProgress - CGFloat(numberOfSegments - countFromRight)).clamped(to: 0...1)
+            let (segmentSize, roundedCorners): (CGSize, UIRectCorner) = {
+                if isLeftmostSegment {
+                    return (leftmostSegmentSize, .allCorners)
+                } else {
+                    return (normalSegmentSize, [.topRight, .bottomRight])
+                }
+            }()
+
+            let segmentOrigin = CGPoint(
+                x: bounds.width - gaugeBorderWidth / 2 - CGFloat(countFromRight) * segmentSize.width,
+                y: bounds.minY + gaugeBorderWidth / 2
+            )
+            let segmentRect = CGRect(origin: segmentOrigin, size: segmentSize)
+
+            if !isRightmostSegment {
+                drawOverlapInset(for: segmentRect, in: context)
+                finishPreviousSegment()
+            }
+
+            let borderPath = UIBezierPath(roundedRect: segmentRect, byRoundingCorners: roundedCorners, cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+            let borderColor = fillFraction > 0
+                ? gaugeBorderColor
+                : UIColor(cgColor: gaugeBorderColor).withAlphaComponent(0.5).cgColor
+
+            clearSegmentArea(tracedBy: borderPath, in: context)
+            previousSegmentBorder = (path: borderPath, color: borderColor)
+
+            guard fillFraction > 0 else {
+                continue
+            }
+
+            var segmentFillRect = CGRect(origin: segmentOrigin, size: leftmostSegmentSize).insetBy(dx: fillInset, dy: fillInset)
+            segmentFillRect.size.width *= fillFraction
+            if !isLeftmostSegment {
+                segmentFillRect.size.width += segmentOverlap
+            }
+
+            drawFilledGradient(over: segmentFillRect, roundingCorners: roundedCorners, in: context)
         }
 
-        var segmentFillRect = CGRect(origin: segmentOrigin, size: leftmostSegmentSize).insetBy(dx: fillInset, dy: fillInset)
-        segmentFillRect.size.width *= fillFraction
-        if !isLeftmostSegment {
-            segmentFillRect.size.width += segmentOverlap
-        }
-
-        drawFilledGradient(over: segmentFillRect, roundingCorners: roundedCorners, in: context)
-        if !isRightmostSegment {
-            drawOverlapInset(for: segmentRect, in: context)
-        }
+        finishPreviousSegment()
     }
 
     private var fillInset: CGFloat {
@@ -182,13 +184,14 @@ class SegmentedGaugeBarLayer: CALayer {
     }
 
     private func drawOverlapInset(for segmentRect: CGRect, in context: CGContext) {
-        var overlapInsetRect = segmentRect.insetBy(dx: gaugeBorderWidth, dy: gaugeBorderWidth)
-        overlapInsetRect.size.width += gaugeBorderWidth * 2
+        var overlapInsetRect = segmentRect
+        overlapInsetRect.size.width += gaugeBorderWidth
         let path = UIBezierPath(roundedRect: overlapInsetRect, cornerRadius: cornerRadius)
         context.setStrokeColor(backgroundColor ?? UIColor.white.cgColor)
         context.setLineWidth(gaugeBorderWidth)
+        context.setFillColor(backgroundColor ?? UIColor.white.cgColor)
         context.addPath(path.cgPath)
-        context.strokePath()
+        context.drawPath(using: .fillStroke)
     }
 
     private func drawBorder(_ path: UIBezierPath, color: CGColor, in context: CGContext) {
