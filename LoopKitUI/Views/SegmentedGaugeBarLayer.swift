@@ -80,10 +80,12 @@ class SegmentedGaugeBarLayer: CALayer {
         }
 
         let segmentCounts = 1...numberOfSegments
-        for countFromRight in 1...numberOfSegments {
+        for countFromRight in segmentCounts {
             let isRightmostSegment = countFromRight == segmentCounts.lowerBound
             let isLeftmostSegment = countFromRight == segmentCounts.upperBound
+
             let fillFraction = (presentationProgress - CGFloat(numberOfSegments - countFromRight)).clamped(to: 0...1)
+
             let (segmentSize, roundedCorners): (CGSize, UIRectCorner) = {
                 if isLeftmostSegment {
                     return (leftmostSegmentSize, .allCorners)
@@ -92,10 +94,11 @@ class SegmentedGaugeBarLayer: CALayer {
                 }
             }()
 
-            let segmentOrigin = CGPoint(
-                x: bounds.width - gaugeBorderWidth / 2 - CGFloat(countFromRight) * segmentSize.width,
-                y: bounds.minY + gaugeBorderWidth / 2
-            )
+            var originX = bounds.width - gaugeBorderWidth / 2 - CGFloat(countFromRight) * leftmostSegmentSize.width
+            if !isLeftmostSegment {
+                originX -= segmentOverlap
+            }
+            let segmentOrigin = CGPoint(x: originX, y: bounds.minY + gaugeBorderWidth / 2)
             let segmentRect = CGRect(origin: segmentOrigin, size: segmentSize)
 
             if !isRightmostSegment {
