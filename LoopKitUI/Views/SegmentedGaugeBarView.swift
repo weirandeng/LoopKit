@@ -78,17 +78,8 @@ class SegmentedGaugeBarView: UIView {
         return layer as! SegmentedGaugeBarLayer
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setup()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setup()
-    }
-
-    private func setup() {
+    override func layoutSubviews() {
+        super.layoutSubviews()
         layer.cornerRadius = frame.height / 2
     }
 }
