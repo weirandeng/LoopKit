@@ -39,7 +39,7 @@ class TemporaryScheduleOverrideTests: XCTestCase {
             context: .custom,
             settings: TemporaryScheduleOverrideSettings(
                 targetRange: DoubleRange(minValue: 0, maxValue: 0),
-                basalRateMultiplier: 1.5
+                insulinNeedsScaleFactor: 1.5
             ),
             startDate: date(at: start),
             duration: .finite(date(at: end).timeIntervalSince(date(at: start)))

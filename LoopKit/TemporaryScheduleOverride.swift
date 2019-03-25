@@ -45,8 +45,28 @@ public struct TemporaryScheduleOverride: Equatable {
     public var startDate: Date
     public var duration: Duration
 
+    public var endDate: Date {
+        get {
+            return startDate + duration.timeInterval
+        }
+        set {
+            precondition(newValue > startDate)
+            if newValue == .distantFuture {
+                duration = .indefinite
+            } else {
+                duration = .finite(newValue.timeIntervalSince(startDate))
+            }
+        }
+    }
+
     public var activeInterval: DateInterval {
-        return DateInterval(start: startDate, duration: duration.timeInterval)
+        get {
+            return DateInterval(start: startDate, end: endDate)
+        }
+        set {
+            startDate = newValue.start
+            endDate = newValue.end
+        }
     }
 
     public func hasFinished(relativeTo date: Date = Date()) -> Bool {
@@ -54,6 +74,7 @@ public struct TemporaryScheduleOverride: Equatable {
     }
 
     public init(context: Context, settings: TemporaryScheduleOverrideSettings, startDate: Date, duration: Duration) {
+        precondition(duration.timeInterval > 0)
         self.context = context
         self.settings = settings
         self.startDate = startDate
@@ -167,6 +188,9 @@ extension DailyValueSchedule {
         calendar: Calendar,
         updatingOverridenValuesWith update: (T) -> T
     ) -> DailyValueSchedule {
+        var calendar = calendar
+        calendar.timeZone = timeZone
+
         guard let activeInterval = clamping(activeInterval, to: date, calendar: calendar) else {
             // Active interval does not fall within this date; schedule is unchanged
             return self
