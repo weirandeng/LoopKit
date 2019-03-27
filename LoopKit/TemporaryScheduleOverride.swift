@@ -17,7 +17,7 @@ public struct TemporaryScheduleOverride: Equatable {
         case custom
     }
 
-    public enum Duration: Equatable {
+    public enum Duration: Comparable {
         case finite(TimeInterval)
         case indefinite
 
@@ -31,19 +31,23 @@ public struct TemporaryScheduleOverride: Equatable {
         }
 
         public var isFinite: Bool {
-            switch self {
-            case .finite:
-                return true
-            case .indefinite:
-                return false
-            }
+            return timeInterval.isFinite
+        }
+
+        public static func < (lhs: Duration, rhs: Duration) -> Bool {
+            return lhs.timeInterval < rhs.timeInterval
         }
     }
 
     public var context: Context
     public var settings: TemporaryScheduleOverrideSettings
     public var startDate: Date
-    public var duration: Duration
+
+    public var duration: Duration {
+        didSet {
+            precondition(duration.timeInterval > 0)
+        }
+    }
 
     public var endDate: Date {
         get {
@@ -70,7 +74,7 @@ public struct TemporaryScheduleOverride: Equatable {
     }
 
     public func hasFinished(relativeTo date: Date = Date()) -> Bool {
-        return date > activeInterval.end
+        return date > endDate
     }
 
     public init(context: Context, settings: TemporaryScheduleOverrideSettings, startDate: Date, duration: Duration) {
@@ -83,222 +87,6 @@ public struct TemporaryScheduleOverride: Equatable {
 
     public func isActive(at date: Date = Date()) -> Bool {
         return activeInterval.contains(date)
-    }
-}
-
-extension GlucoseRangeSchedule {
-    public func applyingOverride(
-        _ override: TemporaryScheduleOverride,
-        relativeTo date: Date = Date(),
-        calendar: Calendar = .current
-    ) -> GlucoseRangeSchedule {
-        let rangeSchedule = self.rangeSchedule.applyingGlucoseRangeOverride(from: override, relativeTo: date, calendar: calendar)
-        return GlucoseRangeSchedule(rangeSchedule: rangeSchedule)
-    }
-}
-
-extension DailyQuantitySchedule where T == DoubleRange {
-    fileprivate func applyingGlucoseRangeOverride(
-        from override: TemporaryScheduleOverride,
-        relativeTo date: Date,
-        calendar: Calendar
-    ) -> DailyQuantitySchedule {
-        guard let targetRange = override.settings.targetRange else {
-            return self
-        }
-        return DailyQuantitySchedule(
-            unit: unit,
-            valueSchedule: valueSchedule.applyingOverride(
-                during: override.activeInterval,
-                relativeTo: date,
-                calendar: calendar,
-                updatingOverridenValuesWith: { _ in targetRange }
-            )
-        )
-    }
-}
-
-extension /* BasalRateSchedule */ DailyValueSchedule where T == Double {
-    public func applyingBasalRateMultiplier(
-        from override: TemporaryScheduleOverride,
-        relativeTo date: Date = Date(),
-        calendar: Calendar = .current
-    ) -> BasalRateSchedule {
-        return applyingOverride(override, relativeTo: date, calendar: calendar, multiplier: \.basalRateMultiplier)
-    }
-}
-
-extension /* InsulinSensitivitySchedule */ DailyQuantitySchedule where T == Double {
-    public func applyingSensitivityMultiplier(
-        from override: TemporaryScheduleOverride,
-        relativeTo date: Date = Date(),
-        calendar: Calendar = .current
-    ) -> InsulinSensitivitySchedule {
-        return DailyQuantitySchedule(
-            unit: unit,
-            valueSchedule: valueSchedule.applyingOverride(
-                override,
-                relativeTo: date,
-                calendar: calendar,
-                multiplier: \.insulinSensitivityMultiplier
-            )
-        )
-    }
-}
-
-extension /* CarbRatioSchedule */ DailyQuantitySchedule where T == Double {
-    public func applyingCarbRatioMultiplier(
-        from override: TemporaryScheduleOverride,
-        relativeTo date: Date = Date(),
-        calendar: Calendar = .current
-    ) -> CarbRatioSchedule {
-        return DailyQuantitySchedule(
-            unit: unit,
-            valueSchedule: valueSchedule.applyingOverride(
-                override,
-                relativeTo: date,
-                calendar: calendar,
-                multiplier: \.carbRatioMultiplier
-            )
-        )
-    }
-}
-
-extension DailyValueSchedule where T == Double {
-    fileprivate func applyingOverride(
-        _ override: TemporaryScheduleOverride,
-        relativeTo date: Date,
-        calendar: Calendar,
-        multiplier multiplierKeyPath: KeyPath<TemporaryScheduleOverrideSettings, Double?>
-    ) -> DailyValueSchedule {
-        guard let multiplier = override.settings[keyPath: multiplierKeyPath] else { return self }
-        return applyingOverride(
-            during: override.activeInterval,
-            relativeTo: date,
-            calendar: calendar,
-            updatingOverridenValuesWith: { $0 * multiplier }
-        )
-    }
-}
-
-extension DailyValueSchedule {
-    fileprivate func applyingOverride(
-        during activeInterval: DateInterval,
-        relativeTo date: Date,
-        calendar: Calendar,
-        updatingOverridenValuesWith update: (T) -> T
-    ) -> DailyValueSchedule {
-        var calendar = calendar
-        calendar.timeZone = timeZone
-
-        guard let activeInterval = clamping(activeInterval, to: date, calendar: calendar) else {
-            // Active interval does not fall within this date; schedule is unchanged
-            return self
-        }
-
-        let overrideStartOffset = scheduleOffset(for: activeInterval.start)
-        let overrideEndOffset = scheduleOffset(for: activeInterval.end)
-
-        guard overrideStartOffset != overrideEndOffset else {
-            // Full schedule is overridden
-            let overriddenSchedule = items.map { item in
-                RepeatingScheduleValue(startTime: item.startTime, value: update(item.value))
-            }
-            return DailyValueSchedule(dailyItems: overriddenSchedule, timeZone: timeZone)!
-        }
-
-        let scheduleItemsIncludingOverride = scheduleItemsPaddedToClosedInterval
-            .adjacentPairs()
-            .flatMap { item, nextItem -> [RepeatingScheduleValue<T>] in
-                let scheduleItemInterval = item.startTime..<nextItem.startTime
-
-                switch (scheduleItemInterval.contains(overrideStartOffset), scheduleItemInterval.contains(overrideEndOffset)) {
-                case (true, true):
-                    // Override fully contained by this segment
-                    let overrideStart = RepeatingScheduleValue(startTime: overrideStartOffset, value: update(item.value))
-                    let overrideEnd = RepeatingScheduleValue(startTime: overrideEndOffset, value: item.value)
-                    if item.startTime == overrideStartOffset {
-                        // Ignore the existing schedule item
-                        return [overrideStart, overrideEnd]
-                    } else {
-                        // Include the start of the existing item up until the override start
-                        return [item, overrideStart, overrideEnd]
-                    }
-                case (true, false):
-                    // Override begins within this segment
-                    let overrideStart = RepeatingScheduleValue(startTime: overrideStartOffset, value: update(item.value))
-                    if item.startTime == overrideStartOffset {
-                        // Ignore the existing schedule item
-                        return [overrideStart]
-                    } else {
-                        // Include the start of the existing item up until the override start
-                        return [item, overrideStart]
-                    }
-                case (false, true):
-                    // Override ends within this segment
-                    if item.startTime == overrideEndOffset {
-                        // Override ends here naturally
-                        return [item]
-                    } else {
-                        // Include partially overriden item up until end
-                        let partiallyOverridenItem = RepeatingScheduleValue(startTime: item.startTime, value: update(item.value))
-                        let overrideEnd = RepeatingScheduleValue(startTime: overrideEndOffset, value: item.value)
-                        return [partiallyOverridenItem, overrideEnd]
-                    }
-                case (false, false):
-                    // Segment is either disjoint with the override -> should remain unaffected
-                    // or fully encapsulated by the override -> should be updated
-                    if item.startTime < overrideStartOffset || item.startTime > overrideEndOffset {
-                        // The item is unaffected
-                        return [item]
-                    } else {
-                        // The item is fully overriden
-                        let overridenItem = RepeatingScheduleValue(startTime: item.startTime, value: update(item.value))
-                        return [overridenItem]
-                    }
-                }
-            }
-
-        return DailyValueSchedule(
-            dailyItems: scheduleItemsIncludingOverride,
-            timeZone: timeZone
-        )!
-    }
-
-    func clamping(_ interval: DateInterval, to date: Date, calendar: Calendar) -> DateInterval? {
-        let (startHour, startMinute) = referenceTimeInterval.hourAndMinuteComponents
-        let (endHour, endMinute) = maxTimeInterval.hourAndMinuteComponents
-        guard
-            let startOfDateRelativeToSchedule = calendar.date(bySettingHour: startHour, minute: startMinute, second: 0, of: date),
-            var endOfDateRelativeToSchedule = calendar.date(bySettingHour: endHour, minute: endMinute, second: 0, of: date)
-        else {
-            assertionFailure("Unable to compute dates relative to schedule using \(calendar)")
-            return interval
-        }
-
-        if endOfDateRelativeToSchedule <= startOfDateRelativeToSchedule {
-            endOfDateRelativeToSchedule += repeatInterval
-        }
-
-        let scheduleInterval = DateInterval(start: startOfDateRelativeToSchedule, end: endOfDateRelativeToSchedule)
-        guard scheduleInterval.intersects(interval) else {
-            // Interval falls on a different day
-            return nil
-        }
-
-        let startDate = max(interval.start, startOfDateRelativeToSchedule)
-        let endDate = min(interval.end, endOfDateRelativeToSchedule)
-        return DateInterval(start: startDate, end: endDate)
-    }
-
-    /// Pads the schedule with an extra item to form a closed interval.
-    private var scheduleItemsPaddedToClosedInterval: [RepeatingScheduleValue<T>] {
-        guard let lastItem = items.last else {
-            assertionFailure("Schedule should never be empty")
-            return []
-        }
-        let lastItemStartingAtDayEnd = RepeatingScheduleValue(startTime: maxTimeInterval, value: lastItem.value)
-        return items + [lastItemStartingAtDayEnd]
     }
 }
 
@@ -404,27 +192,5 @@ extension TemporaryScheduleOverride.Duration: RawRepresentable {
         case .indefinite:
             return ["duration": "indefinite"]
         }
-    }
-}
-
-private extension GlucoseRangeSchedule {
-    init(rangeSchedule: DailyQuantitySchedule<DoubleRange>) {
-        self.rangeSchedule = rangeSchedule
-    }
-}
-
-private extension DailyQuantitySchedule {
-    init(unit: HKUnit, valueSchedule: DailyValueSchedule<T>) {
-        self.unit = unit
-        self.valueSchedule = valueSchedule
-    }
-}
-
-private extension TimeInterval {
-    var hourAndMinuteComponents: (hour: Int, minute: Int) {
-        let base = self.truncatingRemainder(dividingBy: .hours(24))
-        let hour = Int(base.hours)
-        let minute = Int((base - .hours(Double(hour))).minutes)
-        return (hour, minute)
     }
 }

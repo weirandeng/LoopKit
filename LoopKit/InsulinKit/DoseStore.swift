@@ -108,8 +108,8 @@ public final class DoseStore {
     }
     private let lockedInsulinModel: Locked<InsulinModel?>
 
-    /// The most recently applied schedule override.
-    public var scheduleOverride: TemporaryScheduleOverride?
+    /// A history of recently applied schedule overrides.
+    private let overrideHistory: TemporaryScheduleOverrideHistory?
 
     public var basalProfile: BasalRateSchedule? {
         get {
@@ -125,12 +125,12 @@ public final class DoseStore {
     }
     private let lockedBasalProfile: Locked<BasalRateSchedule?>
 
-    /// The basal profile, applying the most recently enabled override if active.
-    public var basalProfileApplyingOverrideIfActive: BasalRateSchedule? {
-        if let override = scheduleOverride {
-            return basalProfile?.applyingBasalRateMultiplier(from: override)
+    /// The basal profile, applying recent overrides relative to the current moment in time.
+    public var basalProfileApplyingOverrideHistory: BasalRateSchedule? {
+        if let basalProfile = basalProfile {
+            return overrideHistory?.resolvingRecentBasalSchedule(basalProfile)
         } else {
-            return basalProfile
+            return nil
         }
     }
 
@@ -144,12 +144,12 @@ public final class DoseStore {
     }
     private let lockedInsulinSensitivitySchedule: Locked<InsulinSensitivitySchedule?>
 
-    /// The insulin sensitivity schedule, applying the most recently enabled override if active.
-    public var insulinSensitivityScheduleApplyingOverrideIfActive: InsulinSensitivitySchedule? {
-        if let override = scheduleOverride {
-            return insulinSensitivitySchedule?.applyingSensitivityMultiplier(from: override)
+    /// The insulin sensitivity schedule, applying recent overrides relative to the current moment in time.
+    public var insulinSensitivityScheduleApplyingOverrideHistory: InsulinSensitivitySchedule? {
+        if let insulinSensitivitySchedule = insulinSensitivitySchedule {
+            return overrideHistory?.resolvingRecentInsulinSensitivitySchedule(insulinSensitivitySchedule)
         } else {
-            return insulinSensitivitySchedule
+            return nil
         }
     }
 
@@ -207,6 +207,7 @@ public final class DoseStore {
         insulinModel: InsulinModel?,
         basalProfile: BasalRateSchedule?,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
+        overrideHistory: TemporaryScheduleOverrideHistory? = nil,
         syncVersion: Int = 1,
         test_currentDate: Date? = nil
     ) {
@@ -219,6 +220,7 @@ public final class DoseStore {
         self.lockedInsulinModel = Locked(insulinModel)
         self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
         self.lockedBasalProfile = Locked(basalProfile)
+        self.overrideHistory = overrideHistory
         self.persistenceController = cacheStore
         self.syncVersion = syncVersion
 
@@ -470,7 +472,7 @@ extension DoseStore {
             reservoir.date = date
 
             let previousValue = self.lastStoredReservoirValue
-            if let basalProfile = self.basalProfileApplyingOverrideIfActive {
+            if let basalProfile = self.basalProfileApplyingOverrideHistory {
                 var newValues: [StoredReservoirValue] = []
 
                 if let previousValue = previousValue {
@@ -582,7 +584,7 @@ extension DoseStore {
         if let normalizedDoses = self.recentReservoirNormalizedDoseEntriesCache, let firstDoseDate = normalizedDoses.first?.startDate, firstDoseDate <= start {
             return normalizedDoses.filterDateRange(start, end)
         } else {
-            guard let basalProfile = self.basalProfileApplyingOverrideIfActive else {
+            guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
                 throw DoseStoreError.configurationError
             }
 
@@ -905,7 +907,7 @@ extension DoseStore {
                 return
             }
 
-            guard let basalSchedule = self.basalProfileApplyingOverrideIfActive else {
+            guard let basalSchedule = self.basalProfileApplyingOverrideHistory else {
                 self.log.error("Can't save %d doses to HealthKit because no basal profile is configured", doses.count)
                 completion(.failure(DoseStoreError.configurationError))
                 return
@@ -1036,7 +1038,7 @@ extension DoseStore {
     /// - Returns: An array of doses from pump events
     /// - Throws: An error describing the failure to fetch objects
     private func getNormalizedPumpEventDoseEntries(start: Date, end: Date? = nil) throws -> [DoseEntry] {
-        guard let basalProfile = self.basalProfileApplyingOverrideIfActive else {
+        guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
             throw DoseStoreError.configurationError
         }
 
@@ -1057,7 +1059,7 @@ extension DoseStore {
     /// - Returns: An array of doses from pump events
     /// - Throws: An error describing the failure to fetch objects
     private func getNormalizedPumpEventDoseEntriesForSavingToHealthStore(basalStart: Date, end: Date) throws -> [DoseEntry] {
-        guard let basalProfile = self.basalProfileApplyingOverrideIfActive else {
+        guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
             throw DoseStoreError.configurationError
         }
 
@@ -1203,7 +1205,7 @@ extension DoseStore {
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
         guard let insulinModel = self.insulinModel,
-              let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideIfActive
+              let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory
         else {
             completion(.failure(.configurationError))
             return
@@ -1271,10 +1273,10 @@ extension DoseStore {
             "",
             "* insulinModel: \(String(reflecting: insulinModel))",
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
-            "* basalProfileApplyingOverrideIfActive \(basalProfileApplyingOverrideIfActive?.debugDescription ?? "nil")",
+            "* basalProfileApplyingOverrideHistory \(basalProfileApplyingOverrideHistory?.debugDescription ?? "nil")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
-            "* insulinSensitivityScheduleApplyingOverrideIfActive \(insulinSensitivityScheduleApplyingOverrideIfActive?.debugDescription ?? "nil")",
-            "* scheduleOverride: \(scheduleOverride.map(String.init(describing:)) ?? "nil")",
+            "* insulinSensitivityScheduleApplyingOverrideHistory \(insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
+            "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",
             "* areReservoirValuesValid: \(areReservoirValuesValid)",
             "* isUploadRequestPending: \(isUploadRequestPending)",
             "* lastAddedPumpEvents: \(lastAddedPumpEvents)",
