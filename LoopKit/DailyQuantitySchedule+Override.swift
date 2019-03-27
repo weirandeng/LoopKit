@@ -197,10 +197,3 @@ private extension GlucoseRangeSchedule {
         self.rangeSchedule = rangeSchedule
     }
 }
-
-private extension DailyQuantitySchedule {
-    init(unit: HKUnit, valueSchedule: DailyValueSchedule<T>) {
-        self.unit = unit
-        self.valueSchedule = valueSchedule
-    }
-}

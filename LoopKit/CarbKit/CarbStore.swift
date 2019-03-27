@@ -143,6 +143,14 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
 
+    /// The computed carbohydrate sensitivity schedule based on the insulin sensitivity and carb ratio schedules.
+    public var carbSensitivitySchedule: CarbSensitivitySchedule? {
+        guard let insulinSensitivitySchedule = insulinSensitivitySchedule, let carbRatioSchedule = carbRatioSchedule else {
+            return nil
+        }
+        return .carbSensitivitySchedule(insulinSensitivitySchedule: insulinSensitivitySchedule, carbRatioSchedule: carbRatioSchedule)
+    }
+
     /// The expected delay in the appearance of glucose effects, accounting for both digestion and sensor lag
     public let delay: TimeInterval
 
@@ -895,6 +903,7 @@ extension CarbStore {
                 "* insulinSensitivitySchedule: \(self.insulinSensitivitySchedule?.debugDescription ?? "")",
                 "* insulinSensitivityScheduleApplyingOverrideHistory: \(self.insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
                 "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",
+                "* carbSensitivitySchedule: \(self.carbSensitivitySchedule?.debugDescription ?? "nil")",
                 "* delay: \(self.delay)",
                 "* delta: \(self.delta)",
                 "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",

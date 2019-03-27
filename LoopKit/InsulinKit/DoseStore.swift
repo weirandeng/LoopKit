@@ -153,6 +153,14 @@ public final class DoseStore {
         }
     }
 
+    /// The computed EGP schedule based on the basal profile and insulin sensitivity schedule.
+    public var egpSchedule: EGPSchedule? {
+        guard let basalProfile = basalProfile, let insulinSensitivitySchedule = insulinSensitivitySchedule else {
+            return nil
+        }
+        return .egpSchedule(basalSchedule: basalProfile, insulinSensitivitySchedule: insulinSensitivitySchedule)
+    }
+
     public let insulinDeliveryStore: InsulinDeliveryStore
 
     /// The HealthKit sample type managed by this store
@@ -1276,7 +1284,8 @@ extension DoseStore {
             "* basalProfileApplyingOverrideHistory \(basalProfileApplyingOverrideHistory?.debugDescription ?? "nil")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
             "* insulinSensitivityScheduleApplyingOverrideHistory \(insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
-            "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",
+            "* overrideHistory: \(overrideHistory.map(String.init(describing:)) ?? "nil")",
+            "* egpSchedule: \(egpSchedule?.debugDescription ?? "nil")",
             "* areReservoirValuesValid: \(areReservoirValuesValid)",
             "* isUploadRequestPending: \(isUploadRequestPending)",
             "* lastAddedPumpEvents: \(lastAddedPumpEvents)",
