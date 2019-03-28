@@ -141,7 +141,6 @@
 		4353D170203D3E5C007B4ECD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		4353D171203D3E71007B4ECD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		4353D173203D3E7E007B4ECD /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4353D172203D3E7E007B4ECD /* CoreData.framework */; };
-		4353D17A203E7840007B4ECD /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D179203E7840007B4ECD /* Locked.swift */; };
 		435D2925205F3A670026F401 /* counteraction_effect_falling_glucose_almost_duplicates_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 435D2924205F3A670026F401 /* counteraction_effect_falling_glucose_almost_duplicates_input.json */; };
 		435D2928205F3C760026F401 /* counteraction_effect_falling_glucose_double_entries._input.json in Resources */ = {isa = PBXBuildFile; fileRef = 435D2926205F3C750026F401 /* counteraction_effect_falling_glucose_double_entries._input.json */; };
 		435D2929205F3C760026F401 /* momentum_effect_rising_glucose_double_entries_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 435D2927205F3C750026F401 /* momentum_effect_rising_glucose_double_entries_input.json */; };
@@ -380,6 +379,11 @@
 		898E6E722241EDC10019E459 /* DateAndDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E712241EDC10019E459 /* DateAndDurationTableViewController.swift */; };
 		898E6E732241EE000019E459 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DBB2231E20C008961AB /* Comparable.swift */; };
 		8992426521EC138000EA512B /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992426421EC138000EA512B /* UIColor.swift */; };
+		89AC7930224C781200B8E9BA /* DoseProgressReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC792C224C781100B8E9BA /* DoseProgressReporter.swift */; };
+		89AC7931224C781200B8E9BA /* DoseProgressTimerEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC792D224C781100B8E9BA /* DoseProgressTimerEstimator.swift */; };
+		89AC7932224C781200B8E9BA /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC792E224C781200B8E9BA /* Locked.swift */; };
+		89AC7933224C781200B8E9BA /* UnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC792F224C781200B8E9BA /* UnfairLock.swift */; };
+		89AC7935224C783500B8E9BA /* MockDoseProgressEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC7934224C783500B8E9BA /* MockDoseProgressEstimator.swift */; };
 		89D2047B21CC7BD8001238CC /* MockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D2047221CC7BD7001238CC /* MockKit.framework */; };
 		89D2048021CC7BD8001238CC /* MockKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D2047F21CC7BD8001238CC /* MockKitTests.swift */; };
 		89D2048221CC7BD8001238CC /* MockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2047421CC7BD7001238CC /* MockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -393,7 +397,6 @@
 		89D204AB21CC7C8F001238CC /* MockCGMDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */; };
 		89D204AC21CC7C8F001238CC /* MockCGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9EC821A4BC2400351324 /* MockCGMManager.swift */; };
 		89D204B221CC7D93001238CC /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DC540C21B75AE7005A1CE0 /* Collection.swift */; };
-		89D204B321CC7DC7001238CC /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D179203E7840007B4ECD /* Locked.swift */; };
 		89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */; };
 		89D204B521CC7E74001238CC /* MockPumpManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */; };
 		89D204B721CC7F34001238CC /* MockPumpManagerSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */; };
@@ -670,7 +673,6 @@
 		4352A73B20DECF0600CAC200 /* CGMManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGMManager.swift; sourceTree = "<group>"; };
 		4353D16E203D104F007B4ECD /* CarbStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbStoreError.swift; sourceTree = "<group>"; };
 		4353D172203D3E7E007B4ECD /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		4353D179203E7840007B4ECD /* Locked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locked.swift; sourceTree = "<group>"; };
 		4359E74D1EEA1FBC0022EF0C /* FoodEmojiDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodEmojiDataSource.swift; sourceTree = "<group>"; };
 		4359E74F1EED04330022EF0C /* ice_35_min_partial_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_partial_output.json; sourceTree = "<group>"; };
 		435D2924205F3A670026F401 /* counteraction_effect_falling_glucose_almost_duplicates_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = counteraction_effect_falling_glucose_almost_duplicates_input.json; sourceTree = "<group>"; };
@@ -956,6 +958,11 @@
 		89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsSetupViewController.swift; sourceTree = "<group>"; };
 		89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MockPumpManager.storyboard; sourceTree = "<group>"; };
 		89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsViewController.swift; sourceTree = "<group>"; };
+		89AC792C224C781100B8E9BA /* DoseProgressReporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseProgressReporter.swift; sourceTree = "<group>"; };
+		89AC792D224C781100B8E9BA /* DoseProgressTimerEstimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseProgressTimerEstimator.swift; sourceTree = "<group>"; };
+		89AC792E224C781200B8E9BA /* Locked.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locked.swift; sourceTree = "<group>"; };
+		89AC792F224C781200B8E9BA /* UnfairLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
+		89AC7934224C783500B8E9BA /* MockDoseProgressEstimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDoseProgressEstimator.swift; sourceTree = "<group>"; };
 		89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMDataSource.swift; sourceTree = "<group>"; };
 		89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockCGMManager+UI.swift"; sourceTree = "<group>"; };
 		89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManagerSettingsViewController.swift; sourceTree = "<group>"; };
@@ -1080,7 +1087,6 @@
 			isa = PBXGroup;
 			children = (
 				1F5DAB1C2118C95700048054 /* LocalizedString.swift */,
-				4353D179203E7840007B4ECD /* Locked.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1399,6 +1405,8 @@
 				891A3FD4224B047200378B27 /* DailyQuantitySchedule+Override.swift */,
 				43D8FDE81C7290350073BE78 /* DailyValueSchedule.swift */,
 				4379CFE221102A4100AADC79 /* DeviceManager.swift */,
+				89AC792C224C781100B8E9BA /* DoseProgressReporter.swift */,
+				89AC792D224C781100B8E9BA /* DoseProgressTimerEstimator.swift */,
 				891A3FD8224BEB4500378B27 /* EGPSchedule.swift */,
 				43C9805B212D216A003B5D17 /* GlucoseChange.swift */,
 				43D8FDEA1C7290350073BE78 /* GlucoseEffect.swift */,
@@ -1409,6 +1417,7 @@
 				43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */,
 				43B17C88208EEC0B00AC27E9 /* HealthStoreUnitCache.swift */,
 				43F5034A21051FCD009FA89A /* KeychainManager.swift */,
+				89AC792E224C781200B8E9BA /* Locked.swift */,
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
 				432CF87220D774220066B889 /* PumpManager.swift */,
 				43FB610620DDF19B002B996B /* PumpManagerError.swift */,
@@ -1421,6 +1430,7 @@
 				891A3FCE2249738500378B27 /* TemporaryScheduleOverrideHistory.swift */,
 				895FE06822011E5900FCF18A /* TemporaryScheduleOverridePreset.swift */,
 				895FE06622011E5800FCF18A /* TemporaryScheduleOverrideSettings.swift */,
+				89AC792F224C781200B8E9BA /* UnfairLock.swift */,
 				8951D1AC2241749A00F45694 /* WeakSet.swift */,
 				43D8FE2B1C72914D0073BE78 /* CarbKit */,
 				437AFF22203BE382008C4892 /* Extensions */,
@@ -1685,6 +1695,7 @@
 				89D204AD21CC7D2B001238CC /* Extensions */,
 				89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */,
 				89AB9EC821A4BC2400351324 /* MockCGMManager.swift */,
+				89AC7934224C783500B8E9BA /* MockDoseProgressEstimator.swift */,
 				89CCD4F721A8D5500068C3FB /* MockGlucoseProvider.swift */,
 				89AB9EC621A4774500351324 /* MockPumpManager.swift */,
 				89D2047421CC7BD7001238CC /* MockKit.h */,
@@ -2409,6 +2420,7 @@
 				43D8FE011C7290350073BE78 /* NSTimeInterval.swift in Sources */,
 				43D8FDF61C7290350073BE78 /* DailyQuantitySchedule.swift in Sources */,
 				43D8FDF51C7290350073BE78 /* CarbRatioSchedule.swift in Sources */,
+				89AC7932224C781200B8E9BA /* Locked.swift in Sources */,
 				4322B76F202FA26F0002837D /* GlucoseSampleValue.swift in Sources */,
 				432CF87120D76D5A0066B889 /* SensorDisplayable.swift in Sources */,
 				4322B77F202FA2AF0002837D /* PersistenceController.swift in Sources */,
@@ -2435,14 +2447,17 @@
 				4322B783202FA2AF0002837D /* Reservoir.swift in Sources */,
 				437AFEF02036A156008C4892 /* DeletedCarbObject+CoreDataProperties.swift in Sources */,
 				4322B777202FA2790002837D /* CarbValue.swift in Sources */,
+				89AC7931224C781200B8E9BA /* DoseProgressTimerEstimator.swift in Sources */,
 				4322B782202FA2AF0002837D /* PumpEventType.swift in Sources */,
 				4322B77C202FA2A60002837D /* NSData.swift in Sources */,
 				43D8FDFA1C7290350073BE78 /* GlucoseRangeSchedule.swift in Sources */,
 				4322B77E202FA2AF0002837D /* PersistedPumpEvent.swift in Sources */,
 				437AFEEE2036A156008C4892 /* CachedCarbObject+CoreDataProperties.swift in Sources */,
+				89AC7933224C781200B8E9BA /* UnfairLock.swift in Sources */,
 				4322B772202FA2790002837D /* AbsorbedCarbValue.swift in Sources */,
 				1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */,
 				434113AD20F287DC00D05747 /* NSManagedObjectContext.swift in Sources */,
+				89AC7930224C781200B8E9BA /* DoseProgressReporter.swift in Sources */,
 				4322B77B202FA2790002837D /* StoredCarbEntry.swift in Sources */,
 				4322B790202FA2B30002837D /* InsulinValue.swift in Sources */,
 				434C5F9E209938CD00B2FD1A /* NumberFormatter.swift in Sources */,
@@ -2479,7 +2494,6 @@
 				433BC7AB20538D4C000B1200 /* CachedGlucoseObject+CoreDataProperties.swift in Sources */,
 				43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */,
 				43FB60EB20DDC868002B996B /* SetBolusError.swift in Sources */,
-				4353D17A203E7840007B4ECD /* Locked.swift in Sources */,
 				4322B770202FA26F0002837D /* GlucoseStore.swift in Sources */,
 				4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */,
 				4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */,
@@ -2547,9 +2561,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89AC7935224C783500B8E9BA /* MockDoseProgressEstimator.swift in Sources */,
 				89D204BF21CC7FFB001238CC /* NSTimeInterval.swift in Sources */,
 				89D204C421CC803C001238CC /* HKUnit.swift in Sources */,
-				89D204B321CC7DC7001238CC /* Locked.swift in Sources */,
 				89D204A921CC7C8F001238CC /* MockPumpManager.swift in Sources */,
 				89D204AA21CC7C8F001238CC /* MockGlucoseProvider.swift in Sources */,
 				89D204AB21CC7C8F001238CC /* MockCGMDataSource.swift in Sources */,
