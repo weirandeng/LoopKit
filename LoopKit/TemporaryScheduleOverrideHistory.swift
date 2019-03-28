@@ -39,16 +39,23 @@ public final class TemporaryScheduleOverrideHistory {
 
     public init() {}
 
-    public func recordOverride(_ override: TemporaryScheduleOverride?, at date: Date = Date()) {
+    public func recordOverride(_ override: TemporaryScheduleOverride?, at enableDate: Date = Date()) {
         guard override != recentEvents.last?.override else {
             return
         }
 
         if  let lastEvent = recentEvents.last,
             case .natural = lastEvent.end,
-            !lastEvent.override.hasFinished(relativeTo: date)
+            !lastEvent.override.hasFinished(relativeTo: enableDate)
         {
-            recentEvents[recentEvents.endIndex - 1].end = .early(date)
+            // If a new override was enabled, ensure the active intervals do not overlap.
+            let overrideEnd: Date
+            if let override = override {
+                overrideEnd = min(override.startDate.nearestPrevious, enableDate)
+            } else {
+                overrideEnd = enableDate
+            }
+            recentEvents[recentEvents.endIndex - 1].end = .early(overrideEnd)
         }
 
         if let override = override {
@@ -162,5 +169,12 @@ extension TemporaryScheduleOverrideHistory: RawRepresentable {
 extension TemporaryScheduleOverrideHistory: CustomDebugStringConvertible {
     public var debugDescription: String {
         return "TemporaryScheduleOverrideHistory(recentEvents: \(recentEvents))"
+    }
+}
+
+
+private extension Date {
+    var nearestPrevious: Date {
+        return Date(timeIntervalSince1970: timeIntervalSince1970.nextDown)
     }
 }
