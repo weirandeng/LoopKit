@@ -907,21 +907,15 @@
 		892A5D9D2231E122008961AB /* StateColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateColorPalette.swift; sourceTree = "<group>"; };
 		892A5D9F2231E12F008961AB /* CompletionNotifying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletionNotifying.swift; sourceTree = "<group>"; };
 		892A5DA12231E136008961AB /* HUDProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDProvider.swift; sourceTree = "<group>"; };
-		892A5DA32231E15D008961AB /* BasalScheduleEntryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BasalScheduleEntryTableViewCell.xib; sourceTree = "<group>"; };
-		892A5DA42231E15D008961AB /* BasalScheduleEntryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleEntryTableViewCell.swift; sourceTree = "<group>"; };
-		892A5DA62231E15D008961AB /* BaseHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseHUDView.swift; sourceTree = "<group>"; };
-		892A5DA72231E15D008961AB /* BatteryLevelHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryLevelHUDView.swift; sourceTree = "<group>"; };
 		892A5DAD2231E185008961AB /* HUDAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HUDAssets.xcassets; sourceTree = "<group>"; };
 		892A5DAF2231E191008961AB /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		892A5DB02231E191008961AB /* LevelHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelHUDView.swift; sourceTree = "<group>"; };
 		892A5DB12231E191008961AB /* LevelMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelMaskView.swift; sourceTree = "<group>"; };
 		892A5DB52231E19F008961AB /* ReservoirVolumeHUDView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReservoirVolumeHUDView.xib; sourceTree = "<group>"; };
 		892A5DB62231E19F008961AB /* ReservoirVolumeHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirVolumeHUDView.swift; sourceTree = "<group>"; };
-		892A5DB92231E1CE008961AB /* BasalScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleTableViewController.swift; sourceTree = "<group>"; };
 		892A5DBB2231E20C008961AB /* Comparable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomOutlierTableViewController.swift; sourceTree = "<group>"; };
 		8951D1AC2241749A00F45694 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakSet.swift; sourceTree = "<group>"; };
-		8951D1AE2241753600F45694 /* SuspendResumeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuspendResumeTableViewCell.swift; sourceTree = "<group>"; };
 		895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAndDurationTableViewController.swift; sourceTree = "<group>"; };
 		895FE06622011E5800FCF18A /* TemporaryScheduleOverrideSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideSettings.swift; sourceTree = "<group>"; };
 		895FE06722011E5800FCF18A /* TemporaryScheduleOverride.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverride.swift; sourceTree = "<group>"; };
@@ -1098,6 +1092,7 @@
 				892A5DBB2231E20C008961AB /* Comparable.swift */,
 				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */,
+				891A3FC62247268F00378B27 /* Math.swift */,
 				43177D0D1D3737420006E908 /* NibLoadable.swift */,
 				434FB64B1D712449007B9C70 /* NSData.swift */,
 				43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */,
@@ -1107,7 +1102,6 @@
 				4303C4901E2D664200ADEDC8 /* TimeZone.swift */,
 				434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */,
 				43260F6D21C4BF7A00DD6837 /* UUID.swift */,
-				891A3FC62247268F00378B27 /* Math.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1293,30 +1287,30 @@
 		43BA7155201E484D0058961E /* LoopKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				43BA7156201E484D0058961E /* LoopKitUI.h */,
+				43BA7157201E484D0058961E /* Info.plist */,
 				895FE07022011EDD00FCF18A /* EmojiInputController.storyboard */,
-				895FE06C22011E9900FCF18A /* OverrideEmojiDataSource.swift */,
 				895FE06D22011E9A00FCF18A /* OverrideSelectionViewController.storyboard */,
-				43BA7160201E48910058961E /* CarbKit */,
-				43BA7161201E48EB0058961E /* InsulinKit */,
-				432CF86320D769070066B889 /* View Controllers */,
-				4369F090208B0D68000E3E45 /* Views */,
-				43177D091D3732C70006E908 /* Assets.xcassets */,
-				43BA719920203EF30058961E /* CarbKit.storyboard */,
-				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
-				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
 				43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */,
 				892A5D9F2231E12F008961AB /* CompletionNotifying.swift */,
 				4322B76A202F9E4B0002837D /* HKUnit+LoopKitUI.swift */,
 				892A5DA12231E136008961AB /* HUDProvider.swift */,
+				895FE06C22011E9900FCF18A /* OverrideEmojiDataSource.swift */,
 				43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */,
 				43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */,
 				43F5035521059A8A009FA89A /* ServiceCredential.swift */,
 				892A5D9D2231E122008961AB /* StateColorPalette.swift */,
 				892A5D9B2231E118008961AB /* UIAlertController.swift */,
 				898E6E6B224194050019E459 /* UIColor.swift */,
-				43BA7156201E484D0058961E /* LoopKitUI.h */,
-				43BA7157201E484D0058961E /* Info.plist */,
+				43177D091D3732C70006E908 /* Assets.xcassets */,
+				43BA7160201E48910058961E /* CarbKit */,
+				43BA719920203EF30058961E /* CarbKit.storyboard */,
 				1F5DAB282118CE9300048054 /* InfoPlist.strings */,
+				43BA7161201E48EB0058961E /* InsulinKit */,
+				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
+				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
+				432CF86320D769070066B889 /* View Controllers */,
+				4369F090208B0D68000E3E45 /* Views */,
 			);
 			path = LoopKitUI;
 			sourceTree = "<group>";
@@ -1365,14 +1359,13 @@
 				4301580F1C7EC03B00B64B63 /* LoopKit ExampleUITests */,
 				43D8FDD91C728FDF0073BE78 /* LoopKitTests */,
 				43BA7155201E484D0058961E /* LoopKitUI */,
+				892A5D35222F03CB008961AB /* LoopTestingKit */,
+				892A5D42222F03CB008961AB /* LoopTestingKitTests */,
 				89D2047321CC7BD7001238CC /* MockKit */,
 				89D2047E21CC7BD8001238CC /* MockKitTests */,
 				89D2049021CC7C13001238CC /* MockKitUI */,
-				892A5D35222F03CB008961AB /* LoopTestingKit */,
-				892A5D42222F03CB008961AB /* LoopTestingKitTests */,
-				43D8FDCC1C728FDF0073BE78 /* Products */,
 				43BA718D202020140058961E /* Frameworks */,
-				898E6E52224177FC0019E459 /* Recovered References */,
+				43D8FDCC1C728FDF0073BE78 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1403,6 +1396,7 @@
 				891A3FDA224BEC0D00378B27 /* CarbSensitivitySchedule.swift */,
 				4352A73B20DECF0600CAC200 /* CGMManager.swift */,
 				43D8FDE71C7290350073BE78 /* DailyQuantitySchedule.swift */,
+				891A3FD4224B047200378B27 /* DailyQuantitySchedule+Override.swift */,
 				43D8FDE81C7290350073BE78 /* DailyValueSchedule.swift */,
 				4379CFE221102A4100AADC79 /* DeviceManager.swift */,
 				891A3FD8224BEB4500378B27 /* EGPSchedule.swift */,
@@ -1423,6 +1417,11 @@
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
 				43F5035421059A8A009FA89A /* ServiceAuthentication.swift */,
 				43FB60EA20DDC868002B996B /* SetBolusError.swift */,
+				895FE06722011E5800FCF18A /* TemporaryScheduleOverride.swift */,
+				891A3FCE2249738500378B27 /* TemporaryScheduleOverrideHistory.swift */,
+				895FE06822011E5900FCF18A /* TemporaryScheduleOverridePreset.swift */,
+				895FE06622011E5800FCF18A /* TemporaryScheduleOverrideSettings.swift */,
+				8951D1AC2241749A00F45694 /* WeakSet.swift */,
 				43D8FE2B1C72914D0073BE78 /* CarbKit */,
 				437AFF22203BE382008C4892 /* Extensions */,
 				43D8FE701C7293070073BE78 /* GlucoseKit */,
@@ -1430,12 +1429,6 @@
 				43D8FEB21C7294520073BE78 /* InsulinKit */,
 				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
 				437874B4202FDC8300A3D8B9 /* Persistence */,
-				891A3FD4224B047200378B27 /* DailyQuantitySchedule+Override.swift */,
-				895FE06722011E5800FCF18A /* TemporaryScheduleOverride.swift */,
-				891A3FCE2249738500378B27 /* TemporaryScheduleOverrideHistory.swift */,
-				895FE06822011E5900FCF18A /* TemporaryScheduleOverridePreset.swift */,
-				895FE06622011E5800FCF18A /* TemporaryScheduleOverrideSettings.swift */,
-				8951D1AC2241749A00F45694 /* WeakSet.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -1676,19 +1669,6 @@
 				892A5D45222F03CB008961AB /* Info.plist */,
 			);
 			path = LoopTestingKitTests;
-			sourceTree = "<group>";
-		};
-		898E6E52224177FC0019E459 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				892A5DA62231E15D008961AB /* BaseHUDView.swift */,
-				892A5DA42231E15D008961AB /* BasalScheduleEntryTableViewCell.swift */,
-				892A5DA72231E15D008961AB /* BatteryLevelHUDView.swift */,
-				892A5DB92231E1CE008961AB /* BasalScheduleTableViewController.swift */,
-				8951D1AE2241753600F45694 /* SuspendResumeTableViewCell.swift */,
-				892A5DA32231E15D008961AB /* BasalScheduleEntryTableViewCell.xib */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		8992426321EC137900EA512B /* Extensions */ = {

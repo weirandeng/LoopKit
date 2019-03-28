@@ -6,11 +6,6 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
-import Foundation
-
-func midpoint<T: FloatingPoint>(_ x: T, _ y: T) -> T {
-    return (x + y) / 2
-}
 
 func fractionThrough<T: FloatingPoint>(
     _ value: T,
