@@ -48,14 +48,19 @@ public final class TemporaryScheduleOverrideHistory {
             case .natural = lastEvent.end,
             !lastEvent.override.hasFinished(relativeTo: enableDate)
         {
-            // If a new override was enabled, ensure the active intervals do not overlap.
-            let overrideEnd: Date
-            if let override = override {
-                overrideEnd = min(override.startDate.nearestPrevious, enableDate)
+            let activeOverrideEdited = override?.startDate == lastEvent.override.startDate
+            if activeOverrideEdited {
+                recentEvents.removeLast()
             } else {
-                overrideEnd = enableDate
+                // If a new override was enabled, ensure the active intervals do not overlap.
+                let overrideEnd: Date
+                if let override = override {
+                    overrideEnd = min(override.startDate.nearestPrevious, enableDate)
+                } else {
+                    overrideEnd = enableDate
+                }
+                recentEvents[recentEvents.endIndex - 1].end = .early(overrideEnd)
             }
-            recentEvents[recentEvents.endIndex - 1].end = .early(overrideEnd)
         }
 
         if let override = override {
