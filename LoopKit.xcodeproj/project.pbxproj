@@ -384,6 +384,7 @@
 		89AC7932224C781200B8E9BA /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC792E224C781200B8E9BA /* Locked.swift */; };
 		89AC7933224C781200B8E9BA /* UnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC792F224C781200B8E9BA /* UnfairLock.swift */; };
 		89AC7935224C783500B8E9BA /* MockDoseProgressEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC7934224C783500B8E9BA /* MockDoseProgressEstimator.swift */; };
+		89AC7936224D9CF400B8E9BA /* BasalScheduleEntryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 892A5D62222F6B13008961AB /* BasalScheduleEntryTableViewCell.xib */; };
 		89D2047B21CC7BD8001238CC /* MockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D2047221CC7BD7001238CC /* MockKit.framework */; };
 		89D2048021CC7BD8001238CC /* MockKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D2047F21CC7BD8001238CC /* MockKitTests.swift */; };
 		89D2048221CC7BD8001238CC /* MockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2047421CC7BD7001238CC /* MockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -417,7 +418,6 @@
 		89D204CC21CC8236001238CC /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
 		89D204D221CC837A001238CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89D204D121CC837A001238CC /* Assets.xcassets */; };
 		C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
-		C1FB427F2175570C00FAB378 /* (null) in Resources */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2103,6 +2103,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89AC7936224D9CF400B8E9BA /* BasalScheduleEntryTableViewCell.xib in Resources */,
 				43BA7194202039A90058961E /* GlucoseRangeTableViewCell.xib in Resources */,
 				895FE07122011EDD00FCF18A /* EmojiInputController.storyboard in Resources */,
 				892A5DAE2231E185008961AB /* HUDAssets.xcassets in Resources */,
@@ -2122,7 +2123,6 @@
 				895FE08622011F0C00FCF18A /* DecimalTextFieldTableViewCell.xib in Resources */,
 				43BA719620203C750058961E /* Assets.xcassets in Resources */,
 				1F5DAB2A2118CE9300048054 /* InfoPlist.strings in Resources */,
-				C1FB427F2175570C00FAB378 /* (null) in Resources */,
 				43BA7192202039950058961E /* RepeatingScheduleValueTableViewCell.xib in Resources */,
 				43F5035B21059AF7009FA89A /* AuthenticationTableViewCell.xib in Resources */,
 			);
