@@ -23,13 +23,20 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     let history = TemporaryScheduleOverrideHistory()
 
     private func recordOverride(
-        at offset: TimeInterval,
+        beginningAt offset: TimeInterval,
         duration: TemporaryScheduleOverride.Duration,
-        insulinNeedsScaleFactor scaleFactor: Double)
-    {
+        insulinNeedsScaleFactor scaleFactor: Double,
+        recordedAt enableDateOffset: TimeInterval? = nil
+    ) {
         let settings = TemporaryScheduleOverrideSettings(targetRange: nil, insulinNeedsScaleFactor: scaleFactor)
         let override = TemporaryScheduleOverride(context: .custom, settings: settings, startDate: referenceDate + offset, duration: duration)
-        history.recordOverride(override, at: override.startDate)
+        let enableDate: Date
+        if let enableDateOffset = enableDateOffset {
+            enableDate = referenceDate + enableDateOffset
+        } else {
+            enableDate = override.startDate
+        }
+        history.recordOverride(override, at: enableDate)
     }
 
     private func recordOverrideDisable(at offset: TimeInterval) {
@@ -51,7 +58,7 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     }
 
     func testSingleOverrideNaturalEnd() {
-        recordOverride(at: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
+        recordOverride(beginningAt: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
         let expected = BasalRateSchedule(dailyItems: [
             RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
             RepeatingScheduleValue(startTime: .hours(2), value: 1.8),
@@ -64,7 +71,7 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     }
 
     func testSingleOverrideEarlyEnd() {
-        recordOverride(at: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
+        recordOverride(beginningAt: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
         recordOverrideDisable(at: .hours(3))
         let expected = BasalRateSchedule(dailyItems: [
             RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
@@ -78,7 +85,7 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     }
 
     func testSingleIndefiniteOverrideEarlyEnd() {
-        recordOverride(at: .hours(2), duration: .indefinite, insulinNeedsScaleFactor: 1.5)
+        recordOverride(beginningAt: .hours(2), duration: .indefinite, insulinNeedsScaleFactor: 1.5)
         recordOverrideDisable(at: .hours(3))
         let expected = BasalRateSchedule(dailyItems: [
             RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
@@ -92,8 +99,8 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     }
 
     func testTwoOverrides() {
-        recordOverride(at: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
-        recordOverride(at: .hours(6), duration: .finite(.hours(4)), insulinNeedsScaleFactor: 2.0)
+        recordOverride(beginningAt: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
+        recordOverride(beginningAt: .hours(6), duration: .finite(.hours(4)), insulinNeedsScaleFactor: 2.0)
         let expected = BasalRateSchedule(dailyItems: [
             RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
             RepeatingScheduleValue(startTime: .hours(2), value: 1.8),
@@ -107,10 +114,10 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     }
 
     func testThreeOverrides() {
-        recordOverride(at: .hours(5), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
+        recordOverride(beginningAt: .hours(5), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
         recordOverrideDisable(at: .hours(6))
-        recordOverride(at: .hours(10), duration: .finite(.hours(1)), insulinNeedsScaleFactor: 2.0)
-        recordOverride(at: .hours(12), duration: .finite(.hours(2)), insulinNeedsScaleFactor: 1.5)
+        recordOverride(beginningAt: .hours(10), duration: .finite(.hours(1)), insulinNeedsScaleFactor: 2.0)
+        recordOverride(beginningAt: .hours(12), duration: .finite(.hours(2)), insulinNeedsScaleFactor: 1.5)
         recordOverrideDisable(at: .hours(13))
         let expected = BasalRateSchedule(dailyItems: [
             RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
@@ -127,8 +134,8 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     }
 
     func testOldOverrideRemoval() {
-        recordOverride(at: .hours(-1000), duration: .finite(.hours(1)), insulinNeedsScaleFactor: 2.0)
-        recordOverride(at: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
+        recordOverride(beginningAt: .hours(-1000), duration: .finite(.hours(1)), insulinNeedsScaleFactor: 2.0)
+        recordOverride(beginningAt: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
         let expected = BasalRateSchedule(dailyItems: [
             RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
             RepeatingScheduleValue(startTime: .hours(2), value: 1.8),
@@ -141,14 +148,42 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     }
 
     func testActiveIndefiniteOverride() {
-        recordOverride(at: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
-        recordOverride(at: .hours(6), duration: .indefinite, insulinNeedsScaleFactor: 2.0)
+        recordOverride(beginningAt: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5)
+        recordOverride(beginningAt: .hours(6), duration: .indefinite, insulinNeedsScaleFactor: 2.0)
         let expected = BasalRateSchedule(dailyItems: [
             RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
             RepeatingScheduleValue(startTime: .hours(2), value: 1.8),
             RepeatingScheduleValue(startTime: .hours(5), value: 1.2),
             RepeatingScheduleValue(startTime: .hours(6), value: 2.8),
             RepeatingScheduleValue(startTime: .hours(8), value: 1.4),
+            RepeatingScheduleValue(startTime: .hours(20), value: 1.0)
+        ])!
+
+        XCTAssert(historyResolves(to: expected))
+    }
+
+    func testEditActiveOverride() {
+        recordOverride(beginningAt: .hours(1), duration: .finite(.hours(1)), insulinNeedsScaleFactor: 1.5, recordedAt: .hours(0))
+        recordOverride(beginningAt: .hours(1), duration: .finite(.hours(1)), insulinNeedsScaleFactor: 2.0, recordedAt: .hours(0.5))
+        let expected = BasalRateSchedule(dailyItems: [
+            RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
+            RepeatingScheduleValue(startTime: .hours(1), value: 2.4),
+            RepeatingScheduleValue(startTime: .hours(2), value: 1.2),
+            RepeatingScheduleValue(startTime: .hours(6), value: 1.4),
+            RepeatingScheduleValue(startTime: .hours(20), value: 1.0)
+        ])!
+
+        XCTAssert(historyResolves(to: expected))
+    }
+
+    func testRemoveFutureOverride() {
+        recordOverride(beginningAt: .hours(2), duration: .finite(.hours(3)), insulinNeedsScaleFactor: 1.5, recordedAt: .hours(1))
+        recordOverride(beginningAt: .hours(1), duration: .finite(.hours(1)), insulinNeedsScaleFactor: 2.0)
+        let expected = BasalRateSchedule(dailyItems: [
+            RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
+            RepeatingScheduleValue(startTime: .hours(1), value: 2.4),
+            RepeatingScheduleValue(startTime: .hours(2), value: 1.2),
+            RepeatingScheduleValue(startTime: .hours(6), value: 1.4),
             RepeatingScheduleValue(startTime: .hours(20), value: 1.0)
         ])!
 
