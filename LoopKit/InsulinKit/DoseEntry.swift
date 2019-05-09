@@ -102,8 +102,14 @@ extension DoseEntry {
         guard let basalRate = scheduledBasalRate else {
             return 0
         }
-
-        let unitsPerHour = self.unitsPerHour - basalRate.doubleValue(for: DoseEntry.unitsPerHour)
+        //reduce effect of negartive iob by a multiplier
+        //let unitsPerHour = self.unitsPerHour - basalRate.doubleValue(for: DoseEntry.unitsPerHour)
+        var unitsPerHour : Double
+        unitsPerHour = self.unitsPerHour - basalRate.doubleValue(for: DoseEntry.unitsPerHour)
+        if unitsPerHour < 0 {
+            let negIobMultiplier = 0.5
+            unitsPerHour = unitsPerHour * negIobMultiplier
+        }
 
         guard abs(unitsPerHour) > .ulpOfOne else {
             return 0
