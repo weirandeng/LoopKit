@@ -135,7 +135,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
         tableView.register(LabeledTextFieldTableViewCell.nib(), forCellReuseIdentifier: LabeledTextFieldTableViewCell.className)
         tableView.register(DoubleRangeTableViewCell.nib(), forCellReuseIdentifier: DoubleRangeTableViewCell.className)
-        tableView.register(DecimalTextFieldTableViewCell.nib(), forCellReuseIdentifier: DecimalTextFieldTableViewCell.className)
+        tableView.register(CarbDecimalTextFieldTableViewCell.nib(), forCellReuseIdentifier: CarbDecimalTextFieldTableViewCell.className)
         tableView.register(InsulinSensitivityScalingTableViewCell.nib(), forCellReuseIdentifier: InsulinSensitivityScalingTableViewCell.className)
         tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
         tableView.register(SwitchTableViewCell.nib(), forCellReuseIdentifier: SwitchTableViewCell.className)
