@@ -54,7 +54,7 @@ extension ExponentialInsulinModel: InsulinModel {
         switch time {
         case let t where t <= initialDelay:
             return 1
-        case let t where t >= actionDuration:
+        case let t where t >= (actionDuration + initialDelay):
             return 0
         default:
             return 1 - S * (1 - a) *
