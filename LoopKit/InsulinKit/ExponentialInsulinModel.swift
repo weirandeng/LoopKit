@@ -11,6 +11,7 @@ import Foundation
 public struct ExponentialInsulinModel {
     public let actionDuration: TimeInterval
     public let peakActivityTime: TimeInterval
+    public let initialDelay: TimeInterval
     
     // Precomputed terms
     fileprivate let τ: Double
