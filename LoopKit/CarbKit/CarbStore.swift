@@ -192,7 +192,7 @@ public final class CarbStore: HealthKitSampleStore {
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
         overrideHistory: TemporaryScheduleOverrideHistory? = nil,
         syncVersion: Int = 1,
-        absorptionTimeOverrun: Double = 1.2,
+        absorptionTimeOverrun: Double = 1.5,
         calculationDelta: TimeInterval = 5 /* minutes */ * 60,
         effectDelay: TimeInterval = 10 /* minutes */ * 60
     ) {
