@@ -30,10 +30,10 @@
 "Are you sure you want to delete all reservoir values?" = "Are you sure you want to delete all reservoir values?";
 
 /* The title of the button to add the credentials for a service */
-"authentication-button-add" = "authentication-button-add";
+"authentication-button-add" = "Add Account";
 
 /* The title of the button to remove the credentials for a service */
-"authentication-button-delete" = "authentication-button-delete";
+"authentication-button-delete" = "Delete Account";
 
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basal, bolus, and correction insulin dose amounts are decreased by %@%%.";
