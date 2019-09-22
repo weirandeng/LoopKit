@@ -221,7 +221,7 @@
 "Temporary Override" = "Temporary Override";
 
 /* The default placeholder string for a credential */
-"text-placeholder-required" = "text-placeholder-required";
+"text-placeholder-required" = "Required";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "The maximum absorption time is %@";
