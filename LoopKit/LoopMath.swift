@@ -135,7 +135,7 @@ public enum LoopMath {
                 return prediction
             }
         }
-
+        print("[WD] bg prediction:", prediction)
         return prediction
     }
 }
