@@ -24,7 +24,8 @@ public enum LoopMath {
         }
 
         if let start = start, let end = end {
-            return (start: start.dateFlooredToTimeInterval(delta), end: end.dateCeiledToTimeInterval(delta))
+            return (start: start.dateFlooredToTimeInterval(delta),
+                    end: end.dateCeiledToTimeInterval(delta))
         } else {
             var minDate = samples.first!.startDate
             var maxDate = minDate
@@ -61,7 +62,12 @@ public enum LoopMath {
 
      - returns: A timeline of glucose values
      */
-    public static func predictGlucose(startingAt startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [GlucoseEffect]...) -> [GlucoseValue] {
+    public static func predictGlucose(
+        startingAt startingGlucose: GlucoseValue, 
+        momentum: [GlucoseEffect] = [], 
+        effects: [GlucoseEffect]...
+        ) -> [GlucoseValue] 
+    {
         return predictGlucose(startingAt: startingGlucose, momentum: momentum, effects: effects)
     }
 
@@ -80,7 +86,12 @@ public enum LoopMath {
 
      - returns: A timeline of glucose values
      */
-    public static func predictGlucose(startingAt startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [[GlucoseEffect]]) -> [GlucoseValue] {
+    public static func predictGlucose(
+        startingAt startingGlucose: GlucoseValue,
+        momentum: [GlucoseEffect] = [],
+        effects: [[GlucoseEffect]]
+    ) -> [GlucoseValue]
+    {
         var effectValuesAtDate: [Date: Double] = [:]
         let unit = HKUnit.milligramsPerDeciliter
 
@@ -136,6 +147,9 @@ public enum LoopMath {
             }
         }
         print("[WD] bg prediction:", prediction)
+        if prediction.doubleValue(for: unit) < 0.0 {
+            prediction = HKQuantity(unit: unit, doubleValue: 0.0)
+        }
         return prediction
     }
 }
