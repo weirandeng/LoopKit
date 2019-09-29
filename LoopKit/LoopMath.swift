@@ -137,19 +137,20 @@ public enum LoopMath {
 
         let prediction = effectValuesAtDate.sorted { $0.0 < $1.0 }.reduce([PredictedGlucoseValue(startDate: startingGlucose.startDate, quantity: startingGlucose.quantity)]) { (prediction, effect) -> [GlucoseValue] in
             if effect.0 > startingGlucose.startDate, let lastValue = prediction.last {
+                var next_bg = effect.1 + lastValue.quantity.doubleValue(for: unit)
+                if next_bg < 0.0 {
+                    next_bg = 0.0
+                }
                 let nextValue: GlucoseValue = PredictedGlucoseValue(
                     startDate: effect.0,
-                    quantity: HKQuantity(unit: unit, doubleValue: effect.1 + lastValue.quantity.doubleValue(for: unit))
+                    quantity: HKQuantity(unit: unit, doubleValue: next_bg
                 )
                 return prediction + [nextValue]
             } else {
                 return prediction
             }
         }
-        print("[WD] bg prediction:", prediction)
-        if prediction.doubleValue(for: unit) < 0.0 {
-            prediction = HKQuantity(unit: unit, doubleValue: 0.0)
-        }
+
         return prediction
     }
 }
