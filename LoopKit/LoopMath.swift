@@ -143,7 +143,7 @@ public enum LoopMath {
                 }
                 let nextValue: GlucoseValue = PredictedGlucoseValue(
                     startDate: effect.0,
-                    quantity: HKQuantity(unit: unit, doubleValue: next_bg
+                    quantity: HKQuantity(unit: unit, doubleValue: next_bg)
                 )
                 return prediction + [nextValue]
             } else {
